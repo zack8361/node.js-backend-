@@ -2,8 +2,12 @@
 const express = require('express');
 const cors = require('cors');
 
+const cookieParser = require('cookie-parser');
+
 // bodyParser 설정
+
 const bodyParser = require('body-parser');
+
 const app = express();
 const PORT = 4000;
 
@@ -17,13 +21,18 @@ app.use(express.static('public'));
 // body-parser 을 선언하는 이유 -> form 태그 내에 데이터를 이용하기 위해
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+// cookie-parser 사용
+app.use(cookieParser());
 
 // index.js 라우터 설정 -> index.js 는 뒷주소 생략가능.
 const mainRouter = require('./routes');
 const userRouter = require('./routes/users');
 const boardRouter = require('./routes/board');
 const dbBoardRouter = require('./routes/dbBoard');
+const cookieRouter = require('./routes/cookie');
 
+// cookieRouter = localhost:4000/cookie
+app.use('/cookie', cookieRouter);
 // dbBoardRouter = localhost:4000/dbBoard/의 주소부터 시작
 app.use('/dbBoard', dbBoardRouter);
 

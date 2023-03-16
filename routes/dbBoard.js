@@ -66,6 +66,20 @@ router.post('/modify/:id', (req, res) => {
   }
 });
 
+// 글 삭제하기.
+router.delete('/delete/:id', (req, res) => {
+  if (req.params.id) {
+    boardDB.deleteArticle(req.params.id, (data) => {
+      if (data.affectedRows >= 1) {
+        res.send('삭제완료');
+      } else {
+        const err = new Error('삭제 실패');
+        err.statusCode = 500;
+        throw err;
+      }
+    });
+  }
+});
 // 모든 정보를 출력하는 곳.
 router.get('/getAll', (req, res) => {
   console.log('왔니?');
