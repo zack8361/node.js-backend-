@@ -118,11 +118,13 @@
     <div class="board_container">
       <div class="board_header">
         <h1>Chxnxo Board</h1>
+        <h2>USER : <%= userId %></h2>
       </div>
       <div class="board_write">
         <span>현재 등록 글 : &nbsp; <%= articleCounts %></span>
         <!-- localhost:4000/board/write -->
         <a class="btn red" href="/dbBoard/write">글쓰기</a>
+        <a class="btn orange" href="/login/logout">로그아웃</a>
       </div>
       <div class="board_body">
         <ul class="board">

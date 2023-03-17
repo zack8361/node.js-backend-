@@ -1,12 +1,12 @@
 // node-modules 에 설치 되어있는 기본 패키지 세팅.
 const express = require('express');
 const cors = require('cors');
-
+// 쿠키설정
 const cookieParser = require('cookie-parser');
-
 // bodyParser 설정
-
 const bodyParser = require('body-parser');
+// session 설정
+const session = require('express-session');
 
 const app = express();
 const PORT = 4000;
@@ -23,6 +23,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // cookie-parser 사용
 app.use(cookieParser());
+// session 사용
+app.use(
+  session({
+    secret: 'zack',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60, // 1시간 -> 자동 로그아웃
+    },
+  }),
+);
 
 // index.js 라우터 설정 -> index.js 는 뒷주소 생략가능.
 const mainRouter = require('./routes');
@@ -30,6 +41,13 @@ const userRouter = require('./routes/users');
 const boardRouter = require('./routes/board');
 const dbBoardRouter = require('./routes/dbBoard');
 const cookieRouter = require('./routes/cookie');
+const registerRouter = require('./routes/register');
+const loginRouter = require('./routes/login');
+
+// loginRouter = localhos:4000/login
+app.use('/login', loginRouter);
+// registerRouter = localhost:4000/register
+app.use('/register', registerRouter);
 
 // cookieRouter = localhost:4000/cookie
 app.use('/cookie', cookieRouter);

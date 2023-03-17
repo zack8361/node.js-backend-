@@ -2,13 +2,18 @@ const express = require('express');
 
 const router = express.Router();
 
+// localhost:4000/cookie/
 router.get('/', (req, res) => {
+  res.render('cookie');
+});
+
+router.get('/cook', (req, res) => {
+  // 키 : alert , value : true
   res.cookie('alert', true, {
-    expires: new Date(Date.now() + 1000 * 60),
-    httpOnly: true,
+    maxAge: 1000 * 5,
+    httpOnly: false,
   });
-  console.log(req.cookies);
-  res.render('index');
+  res.status(200).json('쿠기 굽기 성공');
 });
 
 module.exports = router;
