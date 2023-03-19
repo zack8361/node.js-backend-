@@ -10,7 +10,8 @@ const boardDB = {
       cb(data);
     });
   },
-  // 수정하기.
+
+  // 글 쓰기.
   writeArticle: (newArticle, cb) => {
     connection.query(
       `INSERT INTO mydb.board (TITLE,CONTENT) values ('${newArticle.title}', '${newArticle.content}');`,

@@ -10,7 +10,6 @@ const userDb = {
         if (err) {
           throw err;
         }
-
         cb(data);
       },
     );
@@ -22,7 +21,6 @@ const userDb = {
         if (err) {
           throw err;
         }
-
         cb(data);
       },
     );

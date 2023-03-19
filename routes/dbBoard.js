@@ -31,7 +31,9 @@ router.get('/write', isLogin, (req, res) => {
 });
 
 // 실제 글 작성하기.
-router.post('/write', isLogin, (req, res) => {
+router.post('/write', (req, res) => {
+  console.log('왔니?');
+  console.log(req.body);
   if (req.body.title && req.body.content) {
     boardDB.writeArticle(req.body, (data) => {
       console.log(data);
