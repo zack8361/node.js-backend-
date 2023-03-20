@@ -5,7 +5,7 @@ const router = express.Router();
 
 // 로그인 확인 할수 있는 미들웨어.
 const isLogin = (req, res, next) => {
-  if (req.session.login) {
+  if (req.session.login || req.signedCookies.user) {
     next();
   } else {
     res.send('로그인 해주세요.<br><a href="/login">로그인 페이지로 이동</a>');
@@ -32,10 +32,14 @@ router.get('/write', isLogin, (req, res) => {
 
 // 실제 글 작성하기.
 router.post('/write', (req, res) => {
-  console.log('왔니?');
-  console.log(req.body);
   if (req.body.title && req.body.content) {
-    boardDB.writeArticle(req.body, (data) => {
+    const newArticle = {
+      userId: req.session.userId,
+      title: req.body.title,
+      content: req.body.content,
+    };
+
+    boardDB.writeArticle(newArticle, (data) => {
       console.log(data);
       if (data.affectedRows >= 1) {
         res.redirect('/dbBoard');
@@ -68,7 +72,6 @@ router.post('/modify/:id', isLogin, (req, res) => {
   if (req.body.title && req.body.content) {
     boardDB.modifyArticle(req.params.id, req.body, (data) => {
       if (data.affectedRows >= 1) {
-        console.log('1231231');
         res.redirect('/dbBoard');
       } else {
         const err = new Error('글 수정 실패');

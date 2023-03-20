@@ -22,16 +22,14 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // cookie-parser 사용
-app.use(cookieParser());
+app.use(cookieParser('zack'));
 // session 사용
 app.use(
   session({
     secret: 'zack',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-      maxAge: 1000 * 60 * 60, // 1시간 -> 자동 로그아웃
-    },
+    cookie: {},
   }),
 );
 

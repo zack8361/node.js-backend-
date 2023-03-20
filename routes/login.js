@@ -7,6 +7,7 @@ const userDB = require('../controllers/userController');
 router.get('/logout', async (req, res) => {
   req.session.destroy((err) => {
     if (err) throw err;
+    res.clearCookie('user');
     res.redirect('/');
   });
 });
@@ -24,6 +25,13 @@ router.post('/', (req, res) => {
         console.log(req.body.PASSWORD);
         req.session.login = true;
         req.session.userId = req.body.id;
+
+        // 로그인 쿠키 발행 -> 쿠키 키 : user, value = req.body.id
+        res.cookie('user', req.body.id, {
+          maxAge: 1000 * 10,
+          httpOnly: true,
+          signed: true,
+        });
         res.status(200);
         res.redirect('/dbBoard');
       } else {
