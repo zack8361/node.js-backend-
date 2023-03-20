@@ -7,9 +7,11 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 // session 설정
 const session = require('express-session');
+// env 사용.
+require('dotenv').config();
 
 const app = express();
-const PORT = 4000;
+const { PORT } = process.env;
 
 // cors 적용하기.
 app.use(cors());
