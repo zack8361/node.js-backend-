@@ -49,7 +49,7 @@ router.post('/write', (req, res) => {
 // (get) -> 글 수정 모드로 이동
 router.get('/modify/:title', (req, res) => {
   const arrIndex = ARTICLE.findIndex(
-    (article) => article.title === req.params.title
+    (article) => article.title === req.params.title,
   );
   const selectedArticle = ARTICLE[arrIndex];
   res.render('board_modify', { selectedArticle });
@@ -59,7 +59,7 @@ router.get('/modify/:title', (req, res) => {
 router.post('/modify/:title', (req, res) => {
   if (req.body.title && req.body.content) {
     const arrIndex = ARTICLE.findIndex(
-      (article) => article.title === req.params.title
+      (article) => article.title === req.params.title,
     );
     if (arrIndex !== -1) {
       ARTICLE[arrIndex].title = req.body.title;
@@ -74,7 +74,7 @@ router.delete('/delete/:title', (req, res) => {
   console.log('삭제 요청 들어옴');
   // 삭제 요청을 한 제목의 배열을 찾아서 삭제.
   const arrIndex = ARTICLE.findIndex(
-    (artice) => artice.title === req.params.id
+    (artice) => artice.title === req.params.id,
   );
   ARTICLE.splice(arrIndex, 1);
   res.send('삭제 요청되었다.');

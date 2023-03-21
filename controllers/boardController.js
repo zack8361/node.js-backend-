@@ -42,6 +42,7 @@ const boardDB = {
       },
     );
   },
+  // 삭제.
   deleteArticle: (id, cb) => {
     connection.query(
       `DELETE FROM mydb.board WHERE ID_PK = '${id}';`,
