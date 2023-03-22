@@ -1,34 +1,31 @@
 const express = require('express');
+
 const router = express.Router();
-const userDB = require('../controllers/userController');
-// 회원가입 창 띄우기
+
+// controller 에서 export 해준거 받아온다.
+const { registerUser } = require('../controllers/userController');
+
+// 1. 회원가입 페이지로 이동
 router.get('/', (req, res) => {
   res.render('register');
 });
 
-// 실제 회원가입 하기.
-router.post('/', (req, res) => {
-  userDB.userCheck(req.body.id, (data) => {
-    if (data.length === 0) {
-      userDB.registerUser(req.body, (result) => {
-        if (result.affectedRows >= 1) {
-          res.status(200);
-          res.send(
-            '회원 가입 성공<br><a href="/login">로그인 페이지로 이동</a>',
-          );
-        } else {
-          res.status(500);
-          res.send(
-            '회원 가입 실패.<br><a href="/register">회원가입 페이지로 이동</a>',
-          );
-        }
-      });
-    } else {
-      res.status(400);
-      res.send(
-        '이미 있는 id 입니다..<br><a href="/register">회원가입 페이지로 이동</a>',
-      );
-    }
-  });
-});
+// 2. 실제 회원 가입 처리하기. -> 기능은 controller 에서 진행.
+router.post('/', registerUser);
+
 module.exports = router;
+
+// 실제 회원가입 하기.
+// router.post('/', async (req, res) => {
+//   const duplicateUser = await userDB.userCheck(req.body.id);
+//   if (!duplicateUser) {
+//     const registerResult = await userDB.registerUser(req.body);
+//     if (registerResult) {
+//       res.send('성공');
+//     } else {
+//       res.send('실패');
+//     }
+//   } else {
+//     res.send('실패');
+//   }
+// });

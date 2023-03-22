@@ -117,7 +117,7 @@
   <div class="inner">
     <div class="board_container">
       <div class="board_header">
-        <h1>Chxnxo Board</h1>
+        <h1>Chxnxosss Board</h1>
         <h2>USER : <%= userId %></h2>
       </div>
       <div class="board_write">
@@ -142,8 +142,8 @@
             </div>
             <div class="foot">
               <% if (ARTICLE[i].USERID === userId) { %>
-              <a class="btn orange" href="/dbBoard/modify/<%= ARTICLE[i].ID_PK %>">수정</a>
-              <a class="btn blue" href="javascript:void(0)" onclick="deleteArticle('<%= ARTICLE[i].ID_PK %>')">삭제</a>
+              <a class="btn orange" href="/dbBoard/modify/<%= ARTICLE[i]._id %>">수정</a>
+              <a class="btn blue" href="javascript:void(0)" onclick="deleteArticle('<%= ARTICLE[i]._id %>')">삭제</a>
               <% } %>
             </div>
           </li>
@@ -157,18 +157,31 @@
     </div>
   </div>
   <script>
-    const deleteArticle = (ID_PK) => {
-      fetch(`/dbBoard/delete/${ID_PK}`, {
-          method: "delete",
-          headers: {
-            'Content-type': 'application/json'
-          },
-        })
-        .then((res) => {
-          location.href = '/dbBoard'
-          alert("삭제 하시겠습니까?")
-        })
+    async function deleteArticle(id) {
+      const res = await fetch(`/dbBoard/delete/${id}`, {
+        method: "delete",
+      });
+      console.log(res);
+      // 에러가 나오는 상황 먼저 처리.
+      if (res.status !== 200) return alert("통신 실패.");
+
+      const msg = await res.json();
+      console.log(msg);
+
+
     }
+    // const deleteArticle = (ID_PK) => {
+    //   fetch(`/dbBoard/delete/${ID_PK}`, {
+    //       method: "delete",
+    //       headers: {
+    //         'Content-type': 'application/json'
+    //       },
+    //     })
+    //     .then((res) => {
+    //       location.href = '/dbBoard'
+    //       alert("삭제 하시겠습니까?")
+    //     })
+    // }
   </script>
 </body>
 
