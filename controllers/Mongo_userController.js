@@ -1,8 +1,6 @@
-// 몽구스 컨트롤러.
+// db connect 불러오기
 
-require('./mongooseConnect');
-
-const User = require('../models/user');
+// const connection = require('./dbConnect');
 
 const mongoClient = require('./mongoConnect');
 
@@ -30,12 +28,15 @@ const PASSWORD_FAIL_MSG =
 // 1. 회원 가입 기능.
 const registerUser = async (req, res) => {
   try {
+    const client = await mongoClient.connect();
+    const user = client.db('kdt5').collection('user');
+
     // 중복되는 유저 있나 찾기.
-    const duplicatedUser = await User.findOne({ id: req.body.id });
+    const duplicatedUser = await user.findOne({ id: req.body.id });
     if (duplicatedUser) return res.status(400).send(DUPLICATED_MSG);
 
     // 중복되는 유저 없으면 body 값으로 회원가입 시켜라.
-    await User.create(req.body);
+    await user.insertOne(req.body);
     res.status(200).send(SUCCESS_MSG);
 
     // catch 구문
@@ -48,8 +49,11 @@ const registerUser = async (req, res) => {
 // 2. 로그인 기능
 const loginUser = async (req, res) => {
   try {
+    const client = await mongoClient.connect();
+    const user = client.db('kdt5').collection('user');
+
     // id 값이 있는 비밀번호 가져왔는데 만약없다면?
-    const findUser = await User.findOne({ id: req.body.id });
+    const findUser = await user.findOne({ id: req.body.id });
     if (!findUser) return res.status(400).send(LOGIN_FAIL_MSG);
     // 비밀번호 틀린다면?
     if (findUser.password !== req.body.password)

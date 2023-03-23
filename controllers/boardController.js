@@ -11,7 +11,7 @@ const getAllArticles = async (req, res) => {
 
     const allArticleCursor = board.find({});
     const ARTICLE = await allArticleCursor.toArray();
-    console.log(ARTICLE);
+
     res.render('db_board', {
       ARTICLE,
       articleCounts: ARTICLE.length,
@@ -24,7 +24,6 @@ const getAllArticles = async (req, res) => {
 };
 
 const writeArticle = async (req, res) => {
-  console.log('gsadfasdf');
   try {
     const client = await mongoClient.connect();
     const board = client.db('kdt5').collection('board');
@@ -32,6 +31,7 @@ const writeArticle = async (req, res) => {
       USERID: req.session.userId,
       TITLE: req.body.title,
       CONTENT: req.body.content,
+      IMAGE: req.file ? req.file.filename : null,
     };
     await board.insertOne(newArticle);
 
@@ -60,11 +60,22 @@ const updateArticles = async (req, res) => {
   try {
     const client = await mongoClient.connect();
     const board = client.db('kdt5').collection('board');
-    // { name: '구슬기' },
-    // { $set: { name: '김민정', age: 25 } },
+    // 원래 사진을 박아주기위해서.
+    const originArticle = await board.findOne({
+      _id: ObjectId(req.params.id),
+    });
+
+    console.log(req.file);
+
     await board.updateOne(
       { _id: ObjectId(req.params.id) },
-      { $set: { TITLE: req.body.title, CONTENT: req.body.content } },
+      {
+        $set: {
+          TITLE: req.body.title,
+          CONTENT: req.body.content,
+          IMAGE: req.file ? req.file.filename : originArticle.IMAGE,
+        },
+      },
     );
     res.redirect('/dbBoard');
   } catch (err) {

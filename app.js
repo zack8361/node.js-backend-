@@ -20,6 +20,9 @@ app.set('view engine', 'ejs');
 // 스태틱 폴더 설정하기.
 app.use(express.static('public'));
 
+// 사진 업로드 주소요청.
+app.use('/uploads', express.static('uploads'));
+
 // body-parser 을 선언하는 이유 -> form 태그 내에 데이터를 이용하기 위해
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
